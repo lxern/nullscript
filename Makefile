@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -g
 TARGET = nullscript
+CFLAGS = -Wall -Wextra
 SRC = main.c
 BUILD_DIR = build
 EXECUTABLE = $(BUILD_DIR)/$(TARGET)

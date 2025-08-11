@@ -659,14 +659,24 @@ bool values_equal(Value* a, Value* b) {
 }
 
 int encoding_to_number(Value* encoded) {
-    if (encoded->type == VAL_NIL) {
-        return 0;
+    int count = 0;
+    Value* current = encoded;
+
+    while (current != NULL) {
+        if (current->type == VAL_NIL) {
+            return count;
+        }
+        if (current->type == VAL_PAIR && current->data.pair.car->type == VAL_NONE) {
+            count++;
+            current = current->data.pair.cdr;
+        } else {
+            return -1;
+        }
     }
-    if (encoded->type == VAL_PAIR && encoded->data.pair.car->type == VAL_NONE) {
-        return 1 + encoding_to_number(encoded->data.pair.cdr);
-    }
+
     return -1;
 }
+
 
 Value* builtin_eq(Value** args, int argc, Environment* env) {
     if (argc != 2) {
