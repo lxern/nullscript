@@ -1,0 +1,171 @@
+function _0() {
+    nil
+}
+
+function _1() {
+  inc(_0())
+}
+
+function _2() {
+  inc(_1())
+}
+
+function _3() {
+  inc(_2())
+}
+
+function _4() {
+  inc(_3())
+}
+
+function _5() {
+  inc(_4())
+}
+
+function _10() {
+  mul(_5(), _2())
+}
+
+function _20() {
+  mul(_10(), _2())
+}
+
+function inc(n) {
+  pair(none, n)
+}
+
+function dec(n) {
+  match n {
+    case nil -> nil
+    case pair(none, rest) -> rest
+    default -> nil
+  }
+}
+
+function is_zero(n) {
+  match n {
+    case nil -> nil
+    default -> undefined
+  }
+}
+
+function add(a, b) {
+  match b {
+    case nil -> a
+    case pair(none, rest) -> add(inc(a), rest)
+    default -> undefined
+  }
+}
+
+function sub(a, b) {
+  match b {
+    case nil -> a
+    case pair(none, rest) ->
+      match dec(a) {
+        case nil -> nil
+        default -> sub(dec(a), rest)
+      }
+    default -> undefined
+  }
+}
+
+function mul(a, b) {
+  match b {
+    case nil -> nil
+    case pair(none, nil) -> a
+    case pair(none, rest) -> add(a, mul(a, rest))
+    default -> nil
+  }
+}
+
+function div(a, b) {
+  match b {
+    case nil -> nil
+    default -> div_helper(a, b, _0())
+  }
+}
+
+function div_helper(a, b, count) {
+  if eq(a, b) {
+    inc(count)
+  } else {
+    match sub(a, b) {
+      case nil -> count
+      default -> div_helper(sub(a, b), b, inc(count))
+    }
+  }
+}
+
+function mod(a, b) {
+  match sub(a, b) {
+    case nil ->
+      if eq(a, b) {
+        nil
+      } else {
+        a
+      }
+    default -> mod(sub(a, b), b)
+  }
+}
+
+function seq(a, b) {
+  b
+}
+
+function print_char(c) {
+  print(pair(undefined, c))
+}
+
+function print_num(n) {
+  print(pair(none, n))
+}
+
+function newline() {
+  print_char(_10())
+}
+
+function print_fizz() {seq(
+  print_char(mul(_10(), add(_5(), _2()))),seq(
+  print_char(add(_5(), mul(_10(), _10()))),seq(
+  print_char(add(_2(), mul(_10(), mul(_1(), add(_10(), _2()))))),
+  print_char(add(_2(), mul(_10(), mul(_1(), add(_10(), _2()))))))))
+}
+
+function print_buzz() {seq(
+  print_char(sub(mul(_10(), add(_5(), _2())), _4())),seq(
+  print_char(add(mul(add(_10(), _1()), _10()), add(_5(), _2()))),seq(
+  print_char(add(_2(), mul(_10(), mul(_1(), add(_10(), _2()))))),
+  print_char(add(_2(), mul(_10(), mul(_1(), add(_10(), _2()))))))))
+}
+
+function fizzbuzz_check(n) {
+  if is_zero(mod(n, mul(_5(), _3()))) {seq(
+    print_fizz(),seq(
+    print_buzz(),
+    newline()))
+  } else {
+    if is_zero(mod(n, _3())) {seq(
+      print_fizz(),
+      newline())
+    } else {
+      if is_zero(mod(n, _5())) {seq(
+        print_buzz(),
+        newline())
+      } else {seq(
+        print_num(n),
+        newline())
+      }
+    }
+  }
+}
+
+function fizzbuzz(n, i) {
+  if eq(i, inc(n)) {
+    nil
+  } else {seq(
+    fizzbuzz_check(i),
+    fizzbuzz(n,inc(i)))
+  }
+}
+
+fizzbuzz(mul(_20(), _5()), _1())
